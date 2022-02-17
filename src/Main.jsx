@@ -26,7 +26,7 @@ export default class Main extends React.Component {
 
   resetArray() {
     const array = [];
-    while (array.length < 450) {
+    while (array.length < 360) {
       let randomNumber=randomIntFromInterval(1, 700);
       if (!array.includes(randomNumber)) {
         array.push(randomNumber);
