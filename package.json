@@ -1,6 +1,7 @@
 {
   "name": "algo_visualizer",
   "version": "0.1.0",
+  "homepage": "https://patrick-cui.github.io/algo_visualizer/",
   "private": true,
   "dependencies": {
     "@headlessui/react": "^1.4.3",
