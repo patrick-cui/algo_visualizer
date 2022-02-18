@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/algo_visualizer/static/css/main.b7b443bf.css",
+    "main.js": "/algo_visualizer/static/js/main.a66ae8f1.js",
+    "index.html": "/algo_visualizer/index.html",
+    "main.b7b443bf.css.map": "/algo_visualizer/static/css/main.b7b443bf.css.map",
+    "main.a66ae8f1.js.map": "/algo_visualizer/static/js/main.a66ae8f1.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.b7b443bf.css",
+    "static/js/main.a66ae8f1.js"
+  ]
+}
