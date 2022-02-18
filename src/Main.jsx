@@ -13,11 +13,16 @@ function randomIntFromInterval(min, max) {
 export default class Main extends React.Component {
   constructor(props) {
     super(props);
+    this.onInputChangeSpeed = this.onInputChangeSpeed.bind(this);
     this.state = {
       array: [],
       sortMethod: 'selection',
-      animationSpeed: 1,
+      animationSpeed: 0,
     };
+  }
+  onInputChangeSpeed(e) {
+    this.setState({ animationSpeed: e.target.value});
+    //console.log(this.state.animationSpeed);
   }
 
   componentDidMount() {
@@ -58,14 +63,14 @@ export default class Main extends React.Component {
   setRed(i) {
     let arrayBar = document.getElementsByClassName('array-bar');
     setTimeout(() => {
-      arrayBar[i].style.backgroundColor = 'FF0000';
-    }, i * this.state.animationSpeed);
+      arrayBar[i].style.backgroundColor = '#FF0000';
+    }, this.state.animationSpeed*0.01);
   }
   setGreen(i) {
     let arrayBar = document.getElementsByClassName('array-bar');
     setTimeout(() => {
       arrayBar[i].style.backgroundColor = '#34D399';
-    }, i * this.state.animationSpeed);
+    }, this.state.animationSpeed*0.01);
   }
   swap(arr, i, j) {
     let arrayBar = document.getElementsByClassName('array-bar');
@@ -73,11 +78,17 @@ export default class Main extends React.Component {
     //let jh = arrayBar[j].clientHeight + 'px';
     let ih = arr[i]+'px';
     let jh = arr[j]+'px';
-    //console.log(i, j,ih, jh)
+    console.log(i, j,ih, jh)
     setTimeout(() => {
       arrayBar[i].style.height = jh;
       arrayBar[j].style.height = ih;
-    }, i * this.state.animationSpeed);
+    }, this.state.animationSpeed);
+  } 
+  setHeight(arr) {
+    let arrayBar = document.getElementsByClassName('array-bar');
+    for (let i = 0; i < arrayBar.length; i++) {
+      arrayBar[i].style.height = arr[i]+'px';
+    }
   }
   setClientHeight() {
     let arrayBar = document.getElementsByClassName('array-bar');
@@ -100,6 +111,7 @@ export default class Main extends React.Component {
     let arr = this.state.array;
     let n = arr.length;
     let arrayBar = document.getElementsByClassName('array-bar');
+    let speed = this.state.animationSpeed * 5;
     //console.log(arrayBar);
     this.setClientHeight();
 
@@ -108,9 +120,9 @@ export default class Main extends React.Component {
       //console.log(arr);
       //this.print();
       let min = i;
-      this.setRed(min);
+      //this.setRed(min);
       for(let j = i+1; j < n; j++){
-        this.setRed(j);
+        //this.setRed(j);
         if(arr[j] < arr[min]) {
           min=j; 
           this.setGreen(i);
@@ -120,7 +132,7 @@ export default class Main extends React.Component {
       }
       if (min !== i) {
         // Swapping the elements
-        this.swap(arr, i, min); 
+        this.swap(arr, i, min);
         let tmp = arr[i]; 
         arr[i] = arr[min];
         arr[min] = tmp; 
@@ -130,7 +142,38 @@ export default class Main extends React.Component {
       this.setGreen(min);
     } 
   }
-
+  bubbleSort() {
+    console.log('bubble');
+    let arr = this.state.array;
+    let n = arr.length;
+    this.setClientHeight();
+    var i, j; var swapped;
+    for (i = 0; i < n-1; i++) {
+      this.setRed(i);
+      swapped = false;
+      for (j = 0; j < n-i-1; j++) {
+        this.setRed(j);
+        if (arr[j] > arr[j+1]) {
+          swapped = true;
+          var x = j; var y = j+1;
+          var temp = arr[x];
+          arr[x] = arr[y];
+          arr[y] = temp;
+          console.log(x, y, arr[x], arr[y]);
+          setTimeout(() => {
+            this.swap(arr, j, j+1);
+          }, 10);
+        }
+        this.setGreen(j);
+      }
+      if (swapped == false)
+        break;
+      this.setGreen(i);
+    }
+    this.onInputChangeSpeed(0);
+    this.setHeight(arr);
+  }
+  
   mergeSort(array) {
     console.log('merge');
   }
@@ -138,24 +181,18 @@ export default class Main extends React.Component {
   quickSort() {
     console.log('quick');
   }
-
-  bubbleSort() {
-    console.log('bubble');
-  }
-
+  
   heapSort() {
     console.log('heap');
   }
-
   insertionSort() {
     console.log('insertion');
   }
 
-  
-
   render() {
     const { array } = this.state;
     const { sortMethod } = this.state;
+    var {animationSpeed} = this.state;
 
     return (
       <div>
@@ -170,8 +207,9 @@ export default class Main extends React.Component {
 
           <div className="inline-block align-top">
             <Dropdown
+              className="w-100"
               placeholder="Select an sorting algorithm"
-              options={['selection', 'merge', 'bubble', 'heap', 'insertion','quick']}
+              options={['selection', 'insertion', 'bubble', 'heap', 'merge', 'quick']}
               onSelect={(value) => this.state.sortMethod = value.value}
             />
           </div>
@@ -181,6 +219,26 @@ export default class Main extends React.Component {
               className="top=0 inline-block bg-white hover:bg-gray-100 text-gray-800 py-2 px-4 border border-gray-400"
               onClick={() => this.sort()}
             >Sort</button>
+          </div>
+
+          <div class="inline-block align-top border border-gray-400 h-11 top=0">
+            <label class="form-label">Speed</label>
+            <input
+              type="range"
+              className="
+                form-range
+                appearance-none
+                w-full
+                h-4
+                p-0
+                bg-gray-200
+                focus:outline-none focus:ring-0 focus:shadow-none
+              "
+              min="0"
+              max="3000"
+              value = {animationSpeed}
+              onChange={this.onInputChangeSpeed}
+            />
           </div>
           
         </div>
@@ -195,7 +253,6 @@ export default class Main extends React.Component {
           </div>
           ))}
         </div>
-
       </div>  
     );
   }
